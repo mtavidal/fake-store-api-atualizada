@@ -28,7 +28,7 @@ module.exports.getCategoria = (req, res) => {
 };
 
 
-module.exports.addCategoria = (req, res) => {
+module.exports.addCategoria = async (req, res) => {
 	const limit = 1;
 	const sort = -1;
 
@@ -38,23 +38,28 @@ module.exports.addCategoria = (req, res) => {
 			message: 'data is undefined',
 		});
 	} else {
-		Categoria.find()
-			.select(['id'])
-			.limit(limit)
-			.sort({ id: sort })
-			.then((categorias) => {
-				console.log(categorias)
-				const idSoma = categorias.length > 0 ? categorias[0].id + 1 : 1;
-				console.log(idSoma)
-				const categoria = {
-					id: idSoma,
-					nome: req.body.nome,
-				};
-				Categoria.create(categoria)
-					.then(categoria => res.json(categoria))
-					.catch(err => console.log(err))
-			})
-			.catch((err) => console.log(err));
+		const temCategoriaIgual = await Categoria.findOne({ nome: req.body.nome });
+		if (!temCategoriaIgual) {
+			Categoria.find()
+				.select(['id'])
+				.limit(limit)
+				.sort({ id: sort })
+				.then((categorias) => {
+					console.log(categorias)
+					const idSoma = categorias.length > 0 ? categorias[0].id + 1 : 1;
+					console.log(idSoma)
+					const categoria = {
+						id: idSoma,
+						nome: req.body.nome,
+					};
+					Categoria.create(categoria)
+						.then(categoria => res.json(categoria))
+						.catch(err => console.log(err))
+				})
+				.catch((err) => console.log(err));
+		} else {
+			res.status(409).json({ mensagem: `Categoria '${req.body.nome}' já existe` })
+		}
 	}
 };
 
