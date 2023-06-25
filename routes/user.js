@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const user = require('../controller/user')
+const isAuthenticated = require("../helpers/authenticate");
 
-router.get('/',user.getAllUser)
-router.get('/:id',user.getUser)
-router.post('/',user.addUser)
-router.put('/:id',user.editUser)
-router.patch('/:id',user.editUser)
-router.delete('/:id',user.deleteUser)
+router.get('/', isAuthenticated, user.getAllUser)
+router.get('/:id', isAuthenticated, user.getUser)
+router.post('/', isAuthenticated, user.addUser)
+router.put('/:id', isAuthenticated, user.editUser)
+router.patch('/:id', isAuthenticated, user.editUser)
+router.delete('/:id', isAuthenticated, user.deleteUser)
 
 module.exports = router
