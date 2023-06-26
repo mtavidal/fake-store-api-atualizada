@@ -5,18 +5,31 @@ module.exports.getAllCarts = (req, res) => {
 	const sort = req.query.sort == 'desc' ? -1 : 1;
 	const startDate = req.query.startdate || new Date('1970-1-1');
 	const endDate = req.query.enddate || new Date();
+	const skip = Number(req.query.skip) || 0;
+	let totalPedidos = 0;
 
 	console.log(startDate, endDate);
+
+	Cart.countDocuments({}, function (err, count) {
+		if (err) { console.log(err) }
+		else totalPedidos = count
+	});
 
 	Cart.find({
 		data: { $gte: new Date(startDate), $lt: new Date(endDate) },
 	})
 		.select('-_id -produtos._id')
+		.skip(skip)
 		.limit(limit)
 		.sort({ id: sort })
 		.then((carts) => {
+			const response = {
+				total: totalPedidos,
+				carts: carts
+			}
 			console.log(carts)
-			res.json(carts);
+			console.log(response)
+			res.json(response);
 		})
 		.catch((err) => console.log(err));
 };

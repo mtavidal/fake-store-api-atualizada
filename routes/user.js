@@ -5,7 +5,7 @@ const isAuthenticated = require("../helpers/authenticate");
 
 router.get('/', isAuthenticated, user.getAllUser)
 router.get('/:id', isAuthenticated, user.getUser)
-router.post('/', isAuthenticated, user.addUser)
+router.post('/', user.addUser)
 router.put('/:id', isAuthenticated, user.editUser)
 router.patch('/:id', isAuthenticated, user.editUser)
 router.delete('/:id', isAuthenticated, user.deleteUser)
