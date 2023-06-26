@@ -29,7 +29,7 @@ module.exports.getUser = (req, res) => {
 		.catch((err) => console.log(err));
 };
 
-module.exports.addUser = (req, res) => {
+module.exports.addUser = async (req, res) => {
 	const limit = 1;
 	const sort = -1;
 	if (typeof req.body == undefined) {
@@ -38,25 +38,30 @@ module.exports.addUser = (req, res) => {
 			message: 'data is undefined',
 		});
 	} else {
-		User.find()
-			.select(['id'])
-			.limit(limit)
-			.sort({ id: sort })
-			.then((users) => {
-				const idSoma = users.length > 0 ? users[0].id + 1 : 1;
-				const userNew = new User({
-					id: idSoma,
-					email: req.body.email,
-					password: req.body.password,
-					name: req.body.name,
-					type: req.body.type,
-				});
-				User.create(userNew)
-					.then(user => res.json(user))
-					.catch(err => console.log(err))
-			})
-			.catch((err) => console.log(err));
-
+		const emailUser = `^${diacriticSensitiveRegex(req.body.email)}$`
+		const temEmailUserIgual = await User.findOne({ email: { $regex: emailUser, $options: 'i' } });
+		if (!temEmailUserIgual) {
+			User.find()
+				.select(['id'])
+				.limit(limit)
+				.sort({ id: sort })
+				.then((users) => {
+					const idSoma = users.length > 0 ? users[0].id + 1 : 1;
+					const userNew = new User({
+						id: idSoma,
+						email: req.body.email,
+						password: req.body.password,
+						name: req.body.name,
+						type: req.body.type,
+					});
+					User.create(userNew)
+						.then(user => res.json(user))
+						.catch(err => console.log(err))
+				})
+				.catch((err) => console.log(err));
+		} else {
+			res.status(409).json({ mensagem: `Email '${req.body.email}' já é cadastrado.` })
+		}
 		//res.json({id:User.find().count()+1,...req.body})
 	}
 };
@@ -108,3 +113,18 @@ module.exports.deleteUser = (req, res) => {
 		// 	.catch((err) => console.log(err));
 	}
 };
+
+
+function diacriticSensitiveRegex(string = '') {
+	return string
+		.replace(/a/g, '[a,á,à,ä,â]')
+		.replace(/A/g, '[A,a,á,à,ä,â]')
+		.replace(/e/g, '[e,é,ë,è]')
+		.replace(/E/g, '[E,e,é,ë,è]')
+		.replace(/i/g, '[i,í,ï,ì]')
+		.replace(/I/g, '[I,i,í,ï,ì]')
+		.replace(/o/g, '[o,ó,ö,ò]')
+		.replace(/O/g, '[O,o,ó,ö,ò]')
+		.replace(/u/g, '[u,ü,ú,ù]')
+		.replace(/U/g, '[U,u,ü,ú,ù]');
+}
