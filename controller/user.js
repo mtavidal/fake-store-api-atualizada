@@ -66,31 +66,38 @@ module.exports.addUser = async (req, res) => {
 	}
 };
 
-module.exports.editUser = (req, res) => {
+module.exports.editUser = async (req, res) => {
 	if (typeof req.body == undefined || req.params.id == null) {
 		res.json({
 			status: 'error',
 			message: 'something went wrong! check your sent data',
 		});
 	} else {
-		console.log(req.params.id)
-		User.updateOne({ id: req.params.id }, {
-			email: req.body.email,
-			password: req.body.password,
-			name: req.body.name,
-			type: req.body.type,
-		})
-			.then(function () { res.json({ id: req.params.id }) })
-			.catch(function (error) { console.log(error) })
+		const emailUser = `^${diacriticSensitiveRegex(req.body.email)}$`
+		const temEmailUserIgual = await User.findOne({ id: { $ne: req.params.id }, email: { $regex: emailUser, $options: 'i' } });
+		console.log(temEmailUserIgual)
+		if (!temEmailUserIgual) {
+			console.log(req.params.id)
+			User.updateOne({ id: req.params.id }, {
+				email: req.body.email,
+				password: req.body.password,
+				name: req.body.name,
+				type: req.body.type,
+			})
+				.then(function () { res.json({ id: req.params.id }) })
+				.catch(function (error) { console.log(error) })
 
-		// res.json({
+			// res.json({
 
-		// 	id: parseInt(req.params.id),
-		// 	email: req.body.email,
-		// 	password: req.body.password,
-		// 	name: req.body.name,
-		// 	type: req.body.type,
-		// });
+			// 	id: parseInt(req.params.id),
+			// 	email: req.body.email,
+			// 	password: req.body.password,
+			// 	name: req.body.name,
+			// 	type: req.body.type,
+			// });
+		} else {
+			res.status(409).json({ mensagem: `Email '${req.body.email}' já é cadastrado.` })
+		}
 	}
 };
 
