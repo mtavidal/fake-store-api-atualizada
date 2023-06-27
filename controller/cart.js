@@ -39,10 +39,10 @@ module.exports.getCartsbyUserid = (req, res) => {
 	const startDate = req.query.startdate || new Date('1970-1-1');
 	const endDate = req.query.enddate || new Date();
 
-	console.log(startDate, endDate);
+	console.log(startDate, endDate, userId);
 	Cart.find({
-		userId,
-		date: { $gte: new Date(startDate), $lt: new Date(endDate) },
+		userId: userId,
+		// date: { $gte: new Date(startDate), $lt: new Date(endDate) },
 	})
 		.select('-_id -products._id')
 		.then((carts) => {
