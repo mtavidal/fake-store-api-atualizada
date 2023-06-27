@@ -84,6 +84,7 @@ module.exports.addCart = (req, res) => {
 					userId: req.body.userId,
 					data: new Date(),
 					produtos: req.body.products,
+					totalPedido: req.body.totalPedido,
 				};
 				Cart.create(cart)
 					.then(cart => res.json(cart))

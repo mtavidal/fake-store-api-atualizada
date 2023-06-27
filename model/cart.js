@@ -36,7 +36,11 @@ const cartSchema = new schema({
             category: String,
             quantidade: Number,
         }
-    ]
+    ],
+    totalPedido: {
+        type: Number,
+        required: true,
+    }
 })
 
 module.exports = mongoose.model('cart', cartSchema)
