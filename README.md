@@ -8,7 +8,7 @@ Esse é o repositório de uma API REST on-line, FakeStoreApi-Atualizada, que foi
 
 ## ☁️ Servidor On-line
 
-[Railway](https://fake-store-api-atualizada-production.up.railway.app)
+Railway - https://fake-store-api-atualizada-production.up.railway.app
 
 ## 📁 Executar o projeto
 
