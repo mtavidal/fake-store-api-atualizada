@@ -1,6 +1,6 @@
 # FakeStoreApi Atualizada
 
-Esse é o repositório de uma API REST on-line, FakeStoreApi-Atualizada, que foi clonada e atualizada a partir da [FakeStoreAPI](https://github.com/keikaavousi/fake-store-api), elaborada com o objetivo de servir como back-end de um projeto de MVP de ecommerce (Good Eyewear - Grupo 01), proposto como desafio final pela Gama Academy no XP-49. E aqui está disponível o [Repositório do Front](https://github.com/mtavidal/desafio-final-grupo01-front).
+Esse é o repositório de uma API REST on-line, FakeStoreApi-Atualizada, que foi clonada e atualizada a partir da [FakeStoreAPI](https://github.com/keikaavousi/fake-store-api), elaborada com o objetivo de servir como back-end de teste para o front de um projeto de MVP de ecommerce (Good Eyewear - Grupo 01), proposto como desafio final pela Gama Academy no XP-49. E aqui está disponível o [Repositório do Front](https://github.com/mtavidal/desafio-final-grupo01-front).
 
 ## 📑 Documentação
 
