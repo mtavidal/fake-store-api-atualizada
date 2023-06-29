@@ -1,36 +1,33 @@
-<%- include ("../shared/header.ejs") %>
-
-    <!-- intro -->
-    <section class="row">
-        <div class="col-md-6 intro">
-            <h1>Fake Store API Atualizada</h1>
-            <p> É uma API REST on-line, clonada e atualizada a partir da FakeStoreAPI, elaborada com o objetivo de
-                servir como back-end de teste para o front de um projeto de MVP de ecommerce (Good Eyewear - Grupo 01),
-                proposto como desafio final pela Gama Academy no XP-49.</p>
-            <div class="btns">
-                <a class="btn btn-large btn-primary" target="_blank" rel="noopener noreferrer"
-                    href="https://github.com/mtavidal/fake-store-api-atualizada">View on GitHub <img
-                        src="/icons/github.svg"></a>
-                <a class="btn btn-large btn-secondary" href="/docs">Read Docs <img src="/icons/book.svg"></a>
-            </div>
+<!-- intro -->
+<section class="row">
+    <div class="col-md-6 intro">
+        <h1>Fake Store API Atualizada</h1>
+        <p> É uma API REST on-line, clonada e atualizada a partir da FakeStoreAPI, elaborada com o objetivo de
+            servir como back-end de teste para o front de um projeto de MVP de ecommerce (Good Eyewear - Grupo 01),
+            proposto como desafio final pela Gama Academy no XP-49.</p>
+        <div class="btns">
+            <a class="btn btn-large btn-primary" target="_blank" rel="noopener noreferrer"
+                href="https://github.com/mtavidal/fake-store-api-atualizada">View on GitHub <img
+                    src="/icons/github.svg"></a>
+            <a class="btn btn-large btn-secondary" href="/docs">Read Docs <img src="/icons/book.svg"></a>
         </div>
-        <div class="col-md-6 intro-img">
-            <img src="/icons/intro.svg" />
-        </div>
-    </section>
+    </div>
+    <div class="col-md-6 intro-img">
+        <img src="/icons/intro.svg" />
+    </div>
+</section>
 
-    <script>
-        let wrapper = document.querySelector('#result code')
-        let loading = document.createElement('span')
-        loading.className = "loading"
+<script>
+    let wrapper = document.querySelector('#result code')
+    let loading = document.createElement('span')
+    loading.className = "loading"
 
-        document.getElementById("fetch_btn").addEventListener('click', function () {
-            wrapper.appendChild(loading)
-            fetch('https://fakestoreapi.com/products/1')
-                .then(res => res.json())
-                .then(json => {
-                    wrapper.textContent = JSON.stringify(json, undefined, 2)
-                })
-        })
-    </script>
-    <%- include ("../shared/footer.ejs") %>
+    document.getElementById("fetch_btn").addEventListener('click', function () {
+        wrapper.appendChild(loading)
+        fetch('https://fakestoreapi.com/products/1')
+            .then(res => res.json())
+            .then(json => {
+                wrapper.textContent = JSON.stringify(json, undefined, 2)
+            })
+    })
+</script>
