@@ -1,4 +1,5 @@
 const Categoria = require('../model/categoria');
+const Product = require('../model/product');
 
 module.exports.getAllCategoria = (req, res) => {
 	const limit = Number(req.query.limit) || 0;
@@ -83,17 +84,25 @@ module.exports.editCategoria = async (req, res) => {
 	}
 };
 
-module.exports.deleteCategoria = (req, res) => {
-	if (req.params.id == null) {
-		res.json({
-			status: 'error',
-			message: 'cart id should be provided',
-		});
-	} else {
-		Categoria.deleteOne({ id: req.params.id })
-			.then(function () { res.json(req.params.id) })
-			.catch(function (error) { console.log(error) })
+module.exports.deleteCategoria = async (req, res) => {
+	const objectIdCategoria = await Categoria.findOne({ id: req.params.id });
+	const temProduto = await Product.findOne({ category: objectIdCategoria._id });
 
+	console.log(temProduto)
+	if (!temProduto) {
+		if (req.params.id == null) {
+			res.json({
+				status: 'error',
+				message: 'cart id should be provided',
+			});
+		} else {
+			Categoria.deleteOne({ id: req.params.id })
+				.then(function () { res.json(req.params.id) })
+				.catch(function (error) { console.log(error) })
+
+		}
+	} else {
+		res.status(409).json({ mensagem: `Categoria com id:${req.params.id} possui produtos cadastrados, não pode ser deletada.` })
 	}
 };
 
