@@ -70,7 +70,7 @@ module.exports.editCategoria = async (req, res) => {
 		});
 	} else {
 		const nomeCategoria = `^${diacriticSensitiveRegex(req.body.nome)}$`
-		const temCategoriaIgual = await Categoria.findOne({ nome: { $regex: nomeCategoria, $options: 'i' } });
+		const temCategoriaIgual = await Categoria.findOne({ id: { $ne: req.params.id }, nome: { $regex: nomeCategoria, $options: 'i' } });
 		if (!temCategoriaIgual) {
 			Categoria.updateOne({ id: req.params.id }, {
 				nome: req.body.nome,

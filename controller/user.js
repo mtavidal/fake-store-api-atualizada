@@ -75,9 +75,7 @@ module.exports.editUser = async (req, res) => {
 	} else {
 		const emailUser = `^${diacriticSensitiveRegex(req.body.email)}$`
 		const temEmailUserIgual = await User.findOne({ id: { $ne: req.params.id }, email: { $regex: emailUser, $options: 'i' } });
-		console.log(temEmailUserIgual)
 		if (!temEmailUserIgual) {
-			console.log(req.params.id)
 			User.updateOne({ id: req.params.id }, {
 				email: req.body.email,
 				password: req.body.password,
