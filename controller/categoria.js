@@ -39,7 +39,6 @@ module.exports.addCategoria = async (req, res) => {
 		});
 	} else {
 		const nomeCategoria = `^${diacriticSensitiveRegex(req.body.nome)}$`
-		console.log(nomeCategoria);
 		const temCategoriaIgual = await Categoria.findOne({ nome: { $regex: nomeCategoria, $options: 'i' } });
 		if (!temCategoriaIgual) {
 			Categoria.find()
@@ -47,9 +46,7 @@ module.exports.addCategoria = async (req, res) => {
 				.limit(limit)
 				.sort({ id: sort })
 				.then((categorias) => {
-					console.log(categorias)
 					const idSoma = categorias.length > 0 ? categorias[0].id + 1 : 1;
-					console.log(idSoma)
 					const categoria = {
 						id: idSoma,
 						nome: req.body.nome,
@@ -65,18 +62,24 @@ module.exports.addCategoria = async (req, res) => {
 	}
 };
 
-module.exports.editCategoria = (req, res) => {
+module.exports.editCategoria = async (req, res) => {
 	if (typeof req.body == undefined || req.params.id == null) {
 		res.json({
 			status: 'error',
 			message: 'something went wrong! check your sent data',
 		});
 	} else {
-		Categoria.updateOne({ id: req.params.id }, {
-			nome: req.body.nome,
-		})
-			.then(function () { res.json({ id: req.params.id }) })
-			.catch(function (error) { console.log(error) })
+		const nomeCategoria = `^${diacriticSensitiveRegex(req.body.nome)}$`
+		const temCategoriaIgual = await Categoria.findOne({ nome: { $regex: nomeCategoria, $options: 'i' } });
+		if (!temCategoriaIgual) {
+			Categoria.updateOne({ id: req.params.id }, {
+				nome: req.body.nome,
+			})
+				.then(function () { res.json({ id: req.params.id }) })
+				.catch(function (error) { console.log(error) })
+		} else {
+			res.status(409).json({ mensagem: `Categoria '${req.body.nome}' já existe` })
+		}
 	}
 };
 
