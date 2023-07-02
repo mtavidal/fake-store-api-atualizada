@@ -6,7 +6,6 @@ module.exports.getAllProducts = async (req, res) => {
 	const sort = req.query.sort == 'desc' ? -1 : 1;
 	const skip = Number(req.query.skip) || 0;
 	const categoriaReq = Number(req.query.categoria) || null;
-	let totalProdutos = 0;
 	let categoria = null;
 
 	if (categoriaReq) {
@@ -15,10 +14,7 @@ module.exports.getAllProducts = async (req, res) => {
 
 	const query = categoria ? { category: categoria._id } : {}
 
-	Product.countDocuments(query, function (err, count) {
-		if (err) { console.log(err) }
-		else totalProdutos = count
-	});
+	const totalProdutos = await Product.count(query);
 
 	Product.find(query)
 		.populate('category')

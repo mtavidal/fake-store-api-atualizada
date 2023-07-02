@@ -1,19 +1,15 @@
 const Cart = require('../model/cart');
 
-module.exports.getAllCarts = (req, res) => {
+module.exports.getAllCarts = async (req, res) => {
 	const limit = Number(req.query.limit) || 0;
 	const sort = req.query.sort == 'desc' ? -1 : 1;
 	const startDate = req.query.startdate || new Date('1970-1-1');
 	const endDate = req.query.enddate || new Date();
 	const skip = Number(req.query.skip) || 0;
-	let totalPedidos = 0;
 
 	console.log(startDate, endDate);
 
-	Cart.countDocuments({}, function (err, count) {
-		if (err) { console.log(err) }
-		else totalPedidos = count
-	});
+	const totalPedidos = await Cart.count();
 
 	Cart.find({
 		data: { $gte: new Date(startDate), $lt: new Date(endDate) },
